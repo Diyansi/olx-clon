@@ -1,0 +1,102 @@
+.back {
+    background-image: url('../public/logo/l1.jpeg'); /* ✅ Correct Path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* पूरे पेज को सेंटर करने के लिए */
+.login-container {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* पूरा व्यू पोर्ट कवर करेगा */
+    background-color: #f8f9fa; /* हल्का ग्रे बैकग्राउंड */
+}
+
+/* लॉगिन फॉर्म */
+.login-form {
+    width: 350px;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* इनपुट फील्ड */
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* बटन */
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.login-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Signup लिंक */
+.signup-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
+.a {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.abc {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.abc a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.abc a:hover {
+    text-decoration: underline;
+}
+
+.wi{
+    height: 400px;
+    width: 800px;
+}
+.we{
+    width: 700px;
+}
