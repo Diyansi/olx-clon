@@ -56,28 +56,28 @@
 
 // // Start Server
 // app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+import path from 'path';
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url'; // For ES modules path resolution
+import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 dotenv.config();
 
-// For ES Modules: Resolve __dirname
+// ES Modules ke liye __dirname fix karna
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Controllers
+// Controllers import karo
 import * as productController from './controllers/productController.js';
 import * as userController from './controllers/userController.js';
 
-// Multer Storage Config
+// Multer storage config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads'),
   filename: (req, file, cb) => {
@@ -90,21 +90,21 @@ const upload = multer({ storage });
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Static Folders
+// Static folders setup
 app.use('/uploads', express.static(path.resolve('uploads')));
-app.use(express.static(path.join(__dirname, '../frontend/build'))); // Serve React Build
+app.use(express.static(path.join(__dirname, '../frontend/build')));  // React build folder serve karna
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// MongoDB Connection
+// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log('MongoDB connection error:', err));
 
-// API Routes
+// API routes
 app.get('/search', productController.search);
 app.post('/like-product', userController.likeProducts);
 app.post('/add-product', upload.fields([{ name: 'pimage' }, { name: 'pimage2' }]), productController.addProduct);
@@ -117,10 +117,12 @@ app.get('/my-profile/:userId', userController.myProfileById);
 app.get('/get-user/:uId', userController.getUserById);
 app.post('/login', userController.login);
 
-// Serve React frontend (for all other routes)
+// React frontend ke liye catch-all route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
-// Start Server
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+// Server start karo
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
