@@ -39,16 +39,17 @@ app.use('/uploads', express.static(path.resolve('uploads')));
 // Middleware
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow localhost and all vercel.app subdomains
     const allowedOrigins = [
       'http://localhost:3000',
       'https://olx-clon-lspx.vercel.app'
     ];
     const vercelRegex = /^https:\/\/olx-clon-lspx-[a-z0-9\-]+\.vercel\.app$/;
 
+    // Allow if origin is undefined (like Postman or server-to-server)
     if (
+      !origin ||
       allowedOrigins.includes(origin) ||
-      (origin && vercelRegex.test(origin))
+      vercelRegex.test(origin)
     ) {
       callback(null, true);
     } else {
