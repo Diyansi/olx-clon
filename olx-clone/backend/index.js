@@ -1,39 +1,39 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import mongoose from 'mongoose';  // Only keep this line
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';  // Use import instead of require
+import dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
-dotenv.config();  // This is the correct way in ES modules
+dotenv.config();
 
 // Controllers
 import * as productController from './controllers/productController.js';
 import * as userController from './controllers/userController.js';
 
+// Cloudinary config (direct keys, NOT recommended for production)
 cloudinary.config({
-  cloud_name: 'YOUR_CLOUD_NAME',
-  pi_keya: 'YOUR_API_KEY',
-  api_secret: 'YOUR_API_SECRET'
+  cloud_name: 'dfgwno6c0',                  // <-- aapka cloudinary cloud_name
+  api_key: '986545147367419',         // <-- aapka api_key
+  api_secret: 'ZGdSAdhG4IdPwniYNS6OUqyn5is' // <-- aapka api_secret
 });
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'olx_uploads', // Cloudinary folder name
+    folder: 'olx_uploads',
     allowed_formats: ['jpg', 'png', 'jpeg']
   }
 });
 
 const upload = multer({ storage });
 const app = express();
-const port = 4000;
 
-// Static folder for uploads
+// Static folder for uploads (Vercel pe kaam nahi karega, optional)
 app.use('/uploads', express.static(path.resolve('uploads')));
 
 // Middleware
@@ -61,5 +61,12 @@ app.get('/my-profile/:userId', userController.myProfileById);
 app.get('/get-user/:uId', userController.getUserById);
 app.post('/login', userController.login);
 
-// Start Server
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+// --- Vercel ke liye yeh code hata dein ---
+// app.use(express.static(path.join(process.cwd(), 'build')));
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(process.cwd(), 'build', 'index.html'));
+// });
+// app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+
+// --- Vercel ke liye export default app ---
+export default app;
