@@ -17,9 +17,9 @@ import * as userController from './controllers/userController.js';
 
 // Cloudinary config (direct keys, NOT recommended for production)
 cloudinary.config({
-  cloud_name: 'dfgwno6c0',                  // <-- aapka cloudinary cloud_name
-  api_key: '986545147367419',         // <-- aapka api_key
-  api_secret: 'ZGdSAdhG4IdPwniYNS6OUqyn5is' // <-- aapka api_secret
+  cloud_name: 'dfgwno6c0',
+  api_key: '986545147367419',
+  api_secret: 'ZGdSAdhG4IdPwniYNS6OUqyn5is'
 });
 
 const storage = new CloudinaryStorage({
@@ -36,7 +36,7 @@ const app = express();
 // Static folder for uploads (Vercel pe kaam nahi karega, optional)
 app.use('/uploads', express.static(path.resolve('uploads')));
 
-// Middleware
+// --- FINAL CORS CONFIG ---
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
@@ -79,13 +79,6 @@ app.post('/signup', userController.signup);
 app.get('/my-profile/:userId', userController.myProfileById);
 app.get('/get-user/:uId', userController.getUserById);
 app.post('/login', userController.login);
-
-// --- Vercel ke liye yeh code hata dein ---
-// app.use(express.static(path.join(process.cwd(), 'build')));
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(process.cwd(), 'build', 'index.html'));
-// });
-// app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
 
 // --- Vercel ke liye export default app ---
 export default app;
