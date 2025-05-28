@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 // Static folder for uploads
 app.use('/uploads', express.static(path.resolve('uploads')));
@@ -55,4 +55,4 @@ app.get('/get-user/:uId', userController.getUserById);
 app.post('/login', userController.login);
 
 // Start Server
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
