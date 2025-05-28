@@ -109,7 +109,7 @@ function CategoryPage() {
         console.log("Fetched Products:", res.data.products);  // Debugging Log
         let apiProducts = res.data.products || [];
 
-        // ✅ Default Products Filter करें
+        // ✅ Default Products Filter करें (eqeqeq warning fix)
         let filteredDefaultProducts = defaultProducts.filter(
           (item) => item.category.toLowerCase().trim() === param.catName.toLowerCase().trim()
         );
@@ -147,7 +147,8 @@ function CategoryPage() {
       <Categories />
 
       {isSearch && (
-        <h5> SEARCH RESULTS
+        <h5>
+          SEARCH RESULTS
           <button className="clear-btn" onClick={() => setIsSearch(false)}> CLEAR </button>
         </h5>
       )}
@@ -173,7 +174,7 @@ function CategoryPage() {
                     ? process.env.PUBLIC_URL + item.pimage
                     : API_URL + "/" + item.pimage.replace(/\\/g, "/")
               }
-              alt={item.pname} 
+              alt={item.pname || "Product"} 
             />
 
             <h3 className="m-2 price-text"> Rs. {item.price} /- </h3>
