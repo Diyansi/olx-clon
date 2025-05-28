@@ -1,25 +1,31 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import mongoose from 'mongoose';  // Only keep this line
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';  // Use import instead of require
+import dotenv from 'dotenv';
 
-dotenv.config();  // This is the correct way in ES modules
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
-// Controllers
-import * as productController from './controllers/productController.js';
-import * as userController from './controllers/userController.js';
+dotenv.config();
 
-// Storage Configuration for Multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads'),
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix);
-    }
+// Cloudinary config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Multer storage for Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'olx_uploads',
+    allowed_formats: ['jpg', 'png', 'jpeg'],
+  },
 });
 
 const upload = multer({ storage });
@@ -30,7 +36,10 @@ const port = 4000;
 app.use('/uploads', express.static(path.resolve('uploads')));
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://olx-clone-backend-three.vercel.app/'],
+  credentials: true,
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
