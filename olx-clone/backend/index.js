@@ -1,62 +1,36 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import mongoose from 'mongoose';
+import mongoose from 'mongoose';  // Only keep this line
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import dotenv from 'dotenv';  // Use import instead of require
 
-dotenv.config();
+dotenv.config();  // This is the correct way in ES modules
 
 // Controllers
 import * as productController from './controllers/productController.js';
 import * as userController from './controllers/userController.js';
 
-// Cloudinary config (direct keys, NOT recommended for production)
-cloudinary.config({
-  cloud_name: 'dfgwno6c0',
-  api_key: '986545147367419',
-  api_secret: 'ZGdSAdhG4IdPwniYNS6OUqyn5is'
-});
-
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'olx_uploads',
-    allowed_formats: ['jpg', 'png', 'jpeg']
-  }
+// Storage Configuration for Multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'uploads'),
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix);
+    }
 });
 
 const upload = multer({ storage });
 const app = express();
+const port = 4000;
 
-// Static folder for uploads (Vercel pe kaam nahi karega, optional)
+// Static folder for uploads
 app.use('/uploads', express.static(path.resolve('uploads')));
 
-// --- FINAL CORS CONFIG ---
-app.use(cors({
-  origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:3000'
-    ];
-    // This regex matches both production and all preview URLs
-    const vercelRegex = /^https:\/\/olx-clon-lspx(\-[a-z0-9\-]+)?\.vercel\.app$/;
-
-    if (
-      !origin ||
-      allowedOrigins.includes(origin) ||
-      vercelRegex.test(origin)
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -80,5 +54,5 @@ app.get('/my-profile/:userId', userController.myProfileById);
 app.get('/get-user/:uId', userController.getUserById);
 app.post('/login', userController.login);
 
-// --- Vercel ke liye export default app ---
-export default app;
+// Start Server
+app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
