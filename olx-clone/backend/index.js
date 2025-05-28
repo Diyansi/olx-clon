@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';  // Use import instead of require
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 dotenv.config();  // This is the correct way in ES modules
 
@@ -13,13 +15,18 @@ dotenv.config();  // This is the correct way in ES modules
 import * as productController from './controllers/productController.js';
 import * as userController from './controllers/userController.js';
 
-// Storage Configuration for Multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads'),
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix);
-    }
+cloudinary.config({
+  cloud_name: 'YOUR_CLOUD_NAME',
+  pi_keya: 'YOUR_API_KEY',
+  api_secret: 'YOUR_API_SECRET'
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'olx_uploads', // Cloudinary folder name
+    allowed_formats: ['jpg', 'png', 'jpeg']
+  }
 });
 
 const upload = multer({ storage });
