@@ -40,11 +40,10 @@ app.use('/uploads', express.static(path.resolve('uploads')));
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
-      'http://localhost:3000',
-      'https://olx-clon-lspx.vercel.app'
+      'http://localhost:3000'
     ];
     // This regex matches both production and all preview URLs
-    const vercelRegex = /^https:\/\/olx-clon-lspx(-[a-z0-9\-]+)?\.vercel\.app$/;
+    const vercelRegex = /^https:\/\/olx-clon-lspx(\-[a-z0-9\-]+)?\.vercel\.app$/;
 
     if (
       !origin ||
