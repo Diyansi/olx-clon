@@ -38,10 +38,23 @@ app.use('/uploads', express.static(path.resolve('uploads')));
 
 // Middleware
 app.use(cors({
-  origin: [
-    'https://olx-clon-lspx.vercel.app', // <-- apne frontend ka deployed URL yahan likhein
-    'http://localhost:3000'             // (optional, local dev ke liye)
-  ],
+  origin: (origin, callback) => {
+    // Allow localhost and all vercel.app subdomains
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'https://olx-clon-lspx.vercel.app'
+    ];
+    const vercelRegex = /^https:\/\/olx-clon-lspx-[a-z0-9\-]+\.vercel\.app$/;
+
+    if (
+      allowedOrigins.includes(origin) ||
+      (origin && vercelRegex.test(origin))
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(bodyParser.json());
