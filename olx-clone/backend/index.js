@@ -43,7 +43,7 @@ app.use(cors({
       'http://localhost:3000'
     ];
     // This regex matches both production and all preview URLs
-    const vercelRegex = /^https:\/\/olx-clon-lspx(-[a-z0-9\-]+)?\.vercel\.app$/;
+    const vercelRegex = /^https:\/\/olx-clon-lspx(\-[a-z0-9\-]+)?\.vercel\.app$/;
 
     if (
       !origin ||
