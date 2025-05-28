@@ -37,7 +37,13 @@ const app = express();
 app.use('/uploads', express.static(path.resolve('uploads')));
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://olx-clon-lspx.vercel.app', // <-- apne frontend ka deployed URL yahan likhein
+    'http://localhost:3000'             // (optional, local dev ke liye)
+  ],
+  credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
